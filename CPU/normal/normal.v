@@ -106,3 +106,23 @@ module counter (
   );
 
 endmodule
+
+/*clock 50MHz*/
+module clock (
+    clk,
+    sec_clk
+);
+  input clk;
+  output reg sec_clk = 1;
+  reg [24:0] clk_cnt = 0;
+  always @(posedge clk) begin
+    if (clk_cnt == 25'd24999999) begin
+      clk_cnt <= 0;
+      sec_clk <= ~sec_clk;
+    end else begin
+      clk_cnt <= clk_cnt + 25'd1;
+    end
+  end
+
+
+endmodule
