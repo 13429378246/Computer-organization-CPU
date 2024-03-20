@@ -15,7 +15,7 @@ module mux2to32 (
     in,
     out
 );
-  input [31:0] a1, a0;
+  input [31:0] a1, a0;//input in the module must wire       out connect to the module must wire
   output in;
   output [31:0] out;
   assign out = in ? a1 : a0;
@@ -191,6 +191,18 @@ module decoder5to32 (
     end
   end
 endmodule
+/*1 bit adder or suber*/
+module add1(
+    fx,
+    fy, 
+    fci,
+    fadd,
+    out
+);
+  input fx,fy,fci,fadd;
+  output out;
+    assign out = fx + fy & fadd + fci;
+endmodule
 
 /*adder or suber*/
 module adder32 (
@@ -202,10 +214,6 @@ module adder32 (
   input [31:0] x, y;
   input add;
   output [31:0] out;
-  function [1:0] add1;
-    input fx, fy, fci, fadd;
-    assign add1 = fx + fy & fadd + fci;
-  endfunction
 
   add1 adder0 (
       x[0],

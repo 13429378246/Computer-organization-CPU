@@ -1,4 +1,4 @@
-`include "normal.v"
+
 module decoder3to8_test;
   reg [2:0] in;
   reg en;

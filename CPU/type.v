@@ -1,5 +1,5 @@
 
-module ExampleModule #(
+module type #(
     parameter R = 7'b0000011,
     parameter I = 7'b0000111,
     parameter S = 7'b0001111,
@@ -53,7 +53,7 @@ module ExampleModule #(
         rd   <= 0;
       end
       U: begin
-        imm  <= {{12{in[31]}}, in[31:12]};
+        imm  <= {in[31:12],12'b0};
         func <= 0;
         rs2  <= 0;
         rs1  <= 0;
@@ -62,12 +62,18 @@ module ExampleModule #(
       J: begin
         imm  <= {{12{in[31]}}, in[31], in[19:12], in[20], in[30:21]};
         func <= {in[31:25], in[14:12]};
-        func <= 0;
         rs2  <= 0;
         rs1  <= 0;
         rd   <= in[11:7];
       end
-
+      default: begin
+      imm<=0;
+      func<=0;
+      rs2<=0;
+      rs1<=0;
+      rd<=0;
+      end
+      
 
 
     endcase
