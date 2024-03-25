@@ -14,7 +14,7 @@ module typetb();
   reg [31:0] in;
   wire [6:0] opcode;
   wire [31:0] imm;
-  wire [9:0] func;
+  wire [11:0] func;
   wire [4:0] rs2, rs1, rd;
   reg clk;
 type dut (
