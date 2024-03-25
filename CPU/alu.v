@@ -1,10 +1,18 @@
+//1'b0,func3 ,1'b0,func7
 module alu #(
-    parameter R = 7'b0000011,
-    parameter I = 7'b0000111,
-    parameter S = 7'b0001111,
-    parameter B = 7'b0001011,
-    parameter U = 7'b0011011,
-    parameter J = 7'b0011111,
+    parameter R1  = 7'h33,
+    parameter R2  = 7'h3b,
+    parameter Il  = 7'h03,
+    parameter Ih  = 7'h0f,
+    parameter Ii  = 7'h13,
+    parameter Ics = 7'h73,
+    parameter Ij  = 7'h67,
+    parameter Iiw = 7'h1b,
+    parameter S   = 7'h23,
+    parameter SB  = 7'h63,
+    parameter U1  = 7'h17,
+    parameter U2  = 7'h37,
+    parameter UJ  = 7'h6f,
 
     parameter f_add  = 12'h000,
     parameter f_sub  = 12'h020,
@@ -36,11 +44,12 @@ module alu #(
   input [11:0] func;
   output reg [31:0] out;
   output [31:0] cst;
-  wire CF = ((~x) < y) ? 1 : 0;
-  wire PF = ~^out;
-  wire ZF = (out == 0 ? 0 : 1);
-  wire SF = out[31];
-  wire OF = x[31] & y[31] & ~out[31] | ~x[31] & ~y[31] & out[31];
+  wire CF, PF, ZF, SF, OF;
+  assign CF  = ((~x) < y) ? 1 : 0;
+  assign PF  = ~^out;
+  assign ZF  = (out == 0 ? 1 : 0);
+  assign SF  = out[31];
+  assign OF  = (x[31] & y[31] & ~out[31]) | (~x[31] & ~y[31] & out[31]);
   assign cst = {27'b0, CF, PF, ZF, SF, OF};
 
 
@@ -49,8 +58,10 @@ module alu #(
   wire [31:0] d_add_sub;
 
   wire [31:0] d_shift;
-  wire [31:0] d_slt = $signed(x) < $signed(y) ? 1 : 0;
-  wire [31:0] d_sltu = x < y ? 1 : 0;
+  wire [31:0] d_slt;
+  assign d_slt = $signed(x) < $signed(y) ? 1 : 0;
+  wire [31:0] d_sltul;
+  assign d_sltu = x < y ? 1 : 0;
   wire [31:0] d_xor = x ^ y;
   wire [31:0] d_or = x | y;
   wire [31:0] d_and = x & y;
@@ -72,7 +83,7 @@ module alu #(
 
   always @(*) begin
     case (op)
-      R: begin
+      R1, R2: begin
         case (func)
           f_add: out <= d_add_sub;
           f_sub: out <= d_add_sub;
@@ -90,7 +101,7 @@ module alu #(
         endcase
 
       end
-      I: begin
+      Il, Ih, Ii, Ics, Ij, Iiw: begin
         case (func)
 
           default: out <= 0;
@@ -103,20 +114,20 @@ module alu #(
           default: out <= 0;
         endcase
       end
-      B: begin
+      SB: begin
         case (func)
 
           default: out <= 0;
         endcase
       end
-      U: begin
+      U1, U2: begin
         case (func)
           f_lui:   out <= d_lui;
           default: out <= 0;
         endcase
 
       end
-      J: begin
+      UJ: begin
         case (func)
 
           default: out <= 0;

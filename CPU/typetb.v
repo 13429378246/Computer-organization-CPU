@@ -1,12 +1,7 @@
 module typetb();
 
   // Define parameters for convenience
-  localparam R = 7'b0000011;
-  localparam I = 7'b0000111;
-  localparam S = 7'b0001111;
-  localparam B = 7'b0001011;
-  localparam U = 7'b0011011;
-  localparam J = 7'b0011111;
+
 
   // Instantiate the module under test
   
@@ -16,7 +11,19 @@ module typetb();
   wire [31:0] imm;
   wire [11:0] func;
   wire [4:0] rs2, rs1, rd;
+  wire [31:0] out,cst;
   reg clk;
+  reg [31:0] ram [0:31];
+  integer i;
+  initial begin
+    for(i=1;i<32;i=i+1)begin
+    ram[i]={32{1'b1}}-i;
+    
+    end
+    
+    
+  
+  end
 type dut (
     .in(in),
     .opcode(opcode),
@@ -26,18 +33,18 @@ type dut (
     .rs1(rs1),
     .rd(rd)
   );
+  
+  alu aludut(ram[rs1],ram[rs2],opcode,func,out,cst);
 
  always #5 clk = ~clk;
  
-always @(posedge clk) begin 
-    in <= in + 1; 
-  end
+
 
 
   // Initial block to apply inputs
   initial begin
     // Example input values
-        in = 32'h12345600;
+        in = 32'b0000000_00000_00001_000_11111_0110011;
     clk = 0;
 
     // Print outputs
@@ -47,8 +54,17 @@ always @(posedge clk) begin
     $display("RS2: %b", rs2);
     $display("RS1: %b", rs1);
     $display("RD: %b", rd);
-        #1000; 
+    $display("RS1VAL: %b",ram[rs1] );
+    $display("RS2VAL: %b", ram[rs2]);
+    $display("OF: %b", cst[0]);
+    $display("CF: %b", cst[4]);
+    $display("OUTVAL: %b", out);
+    #10 in=32'b0000000_01010_10011_000_10010_0110011;
+    #10 in=32'b0100000_01010_10011_000_10010_0110011;
+    #10 in=32'b0100000_01110_10011_000_10010_0110011;
+    #1000; 
     $finish;
+    
 
   end
 
