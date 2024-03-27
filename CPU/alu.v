@@ -13,7 +13,7 @@ module alu #(
     parameter U1  = 7'h17,
     parameter U2  = 7'h37,
     parameter UJ  = 7'h6f,
-
+//R
     parameter f_add  = 12'h000,
     parameter f_sub  = 12'h020,
     parameter f_sll  = 12'h100,
@@ -24,8 +24,10 @@ module alu #(
     parameter f_sra  = 12'h520,
     parameter f_or   = 12'h600,
     parameter f_and  = 12'h700,
-
+//U
     parameter f_lui = 12'h000
+
+
 
 
 
