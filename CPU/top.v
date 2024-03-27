@@ -17,6 +17,7 @@ module top (
       clk,
       reset,
       inst,
+      spo,
       pc,
       we,
       aluout,
@@ -33,6 +34,7 @@ module top (
       we,
       spo
   );
+
 
 
 endmodule
